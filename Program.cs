@@ -38,6 +38,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<FoodService>();
 
 var app = builder.Build();
 
