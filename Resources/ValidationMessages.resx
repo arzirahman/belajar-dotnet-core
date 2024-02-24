@@ -157,4 +157,12 @@
     <value>Internal Server Error</value>
     <comment/>
   </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Invalid Username or Password</value>
+    <comment/>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unauthorized Request</value>
+    <comment/>
+  </data>
 </root>

@@ -17,6 +17,7 @@ namespace food_order_dotnet.Controllers
             }
             catch (DbUpdateException ex)
             {
+                Console.WriteLine(ex.Message);
                 return BadRequest(new MessageResponse
                 {
                     Message = ex.Message,

@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using food_order_dotnet.Data;
 using food_order_dotnet.DTO.Request;
 using food_order_dotnet.DTO.Response;
 using food_order_dotnet.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +12,17 @@ namespace food_order_dotnet.Controllers
 
     [ApiController]
     [Route("user-management/users")]
-    public class UserController(AppDbContext dbContext, UserService userService) : ApiController 
+    public class UserController(AppDbContext dbContext, UserService userService, JwtService jwtService) : ApiController 
     {
         private readonly AppDbContext _dbContext = dbContext;
         private readonly UserService _userService = userService;
+        private readonly JwtService _jwtService = jwtService;
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetUser()
         {
+            Console.WriteLine(_jwtService.GetUserData().Username);
             var users = await _dbContext.Users.ToListAsync();
             return Ok(users);
         }
@@ -29,11 +34,9 @@ namespace food_order_dotnet.Controllers
         }
 
         [HttpPost("sign-in")]
-        public IActionResult SignIn(SignInRequest request)
+        public async Task<ActionResult<SignInResponse>> SignIn(SignInRequest request)
         {
-            Console.WriteLine("Request Body:");
-            Console.WriteLine(request.Username);
-            return Ok(new MessageResponse { Message = "Login success", StatusCode = 200, Status = "OK" });
+            return await ExecuteAction(async () => await _userService.SignIn(request));
         }
     }
 }

@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace food_order_dotnet.Models
 {
