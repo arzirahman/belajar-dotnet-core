@@ -133,4 +133,28 @@
     <value>Username cannot be empty</value>
     <comment/>
   </data>
+  <data name="FullnameRequired" xml:space="preserve">
+    <value>Fullname cannot be empty</value>
+    <comment/>
+  </data>
+  <data name="RetypePasswordRequired" xml:space="preserve">
+    <value>Retype Password cannot be empty</value>
+    <comment/>
+  </data>
+  <data name="PasswordNotMatch" xml:space="preserve">
+    <value>Password Do Not Match</value>
+    <comment/>
+  </data>
+  <data name="RegisterSuccess" xml:space="preserve">
+    <value>Username {0} registered</value>
+    <comment/>
+  </data>
+  <data name="UsernameExist" xml:space="preserve">
+    <value>Username {0} already exist</value>
+    <comment/>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Internal Server Error</value>
+    <comment/>
+  </data>
 </root>
