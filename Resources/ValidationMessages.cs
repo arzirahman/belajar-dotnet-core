@@ -23,5 +23,7 @@ namespace food_order_dotnet.Resources
         public static string? GetFoodSuccess => _resourceManager.GetString(nameof(GetFoodSuccess));
         public static string? AddCartSuccess => _resourceManager.GetString(nameof(AddCartSuccess));
         public static string? DeleteCartSuccess => _resourceManager.GetString(nameof(DeleteCartSuccess));
+        public static string? AddFavoriteSuccess => _resourceManager.GetString(nameof(AddFavoriteSuccess));
+        public static string? DeleteFavoriteSuccess => _resourceManager.GetString(nameof(DeleteFavoriteSuccess));
     }
 }

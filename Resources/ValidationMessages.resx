@@ -185,4 +185,12 @@
     <value>Delete {0} from Cart Successful</value>
     <comment/>
   </data>
+  <data name="AddFavoriteSuccess" xml:space="preserve">
+    <value>{0} successfully added to favorite</value>
+    <comment/>
+  </data>
+  <data name="DeleteFavoriteSuccess" xml:space="preserve">
+    <value>{0} successfully removed from favorite</value>
+    <comment/>
+  </data>
 </root>

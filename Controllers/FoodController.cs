@@ -33,5 +33,12 @@ namespace food_order_dotnet.Controllers
         {
             return await ExecuteAction(async () => await _foodService.DeleteCart(foodId));
         }
+
+        [HttpPut("foods/{foodId}/favorites")]
+        [Authorize]
+        public async Task<ActionResult<CartResponse>> ToggleFavorite(int foodId)
+        {
+            return await ExecuteAction(async () => await _foodService.ToggleFavorite(foodId));
+        }
     }
 }

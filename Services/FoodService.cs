@@ -90,7 +90,7 @@ namespace food_order_dotnet.Services
                 _dbContext.Carts.Add(cart);
             }
             await _dbContext.SaveChangesAsync();
-            var food = await GetFoodDTO(request.FoodId);
+            var food = await GetFoodDTO(request.FoodId, userId);
             return new CartResponse
             {
                 Total = 1,
@@ -114,7 +114,7 @@ namespace food_order_dotnet.Services
                 _dbContext.Carts.Remove(cart);
                 await _dbContext.SaveChangesAsync();
             }
-            var food = await GetFoodDTO(foodId);
+            var food = await GetFoodDTO(foodId, userId);
             return new CartResponse
             {
                 Total = 1,
@@ -125,9 +125,45 @@ namespace food_order_dotnet.Services
             };
         }
 
-        private async Task<FoodListDTO?> GetFoodDTO(int? foodId)
+        public async Task<CartResponse> ToggleFavorite(int? foodId)
         {
+            if (!await _dbContext.Foods.AnyAsync(f => f.FoodId == foodId))
+            {
+                throw new Exception(ValidationMessages.FoodIdNotFound);
+            }
             var userId = _jwtService.GetUserData().UserId;
+            var favorite = await _dbContext.FavoriteFoods.FirstOrDefaultAsync(ff => ff.FoodId == foodId && ff.UserId == userId);
+            if (favorite == null)
+            {
+                favorite = new FavoriteFood
+                {
+                    FoodId = foodId,
+                    UserId = userId,
+                    IsFavorite = true
+                };
+                _dbContext.FavoriteFoods.Add(favorite);
+            } 
+            else
+            {
+                favorite.IsFavorite = false;
+                _dbContext.FavoriteFoods.Update(favorite);
+            }
+            await _dbContext.SaveChangesAsync();
+            var food = await GetFoodDTO(foodId, userId);
+            return new CartResponse
+            {
+                Total = 1,
+                Message = string.Format((food?.IsFavorite == true 
+                    ? ValidationMessages.AddFavoriteSuccess 
+                    : ValidationMessages.DeleteFavoriteSuccess) ?? "", food?.FoodName),
+                StatusCode = (int) HttpStatusCode.OK,
+                Status = ReasonPhrases.GetReasonPhrase((int) HttpStatusCode.OK),
+                Data = food
+            };
+        }
+
+        private async Task<FoodListDTO?> GetFoodDTO(int? foodId, int? userId)
+        {
             return await _dbContext.Foods
                 .Where(f => f.FoodId == foodId)
                 .Select(
