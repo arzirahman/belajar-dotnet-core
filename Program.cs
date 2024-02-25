@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text;
 using food_order_dotnet.Data;
 using food_order_dotnet.DTO.Response;
@@ -17,7 +16,7 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options => 
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("publicConnection"));
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
