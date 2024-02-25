@@ -1,4 +1,3 @@
-using food_order_dotnet.Data;
 using food_order_dotnet.DTO.Request;
 using food_order_dotnet.DTO.Response;
 using food_order_dotnet.Services;
@@ -10,9 +9,8 @@ namespace food_order_dotnet.Controllers
 
     [ApiController]
     [Route("food-order")]
-    public class FoodController(AppDbContext dbContext, FoodService foodService) : ApiController 
+    public class FoodController(FoodService foodService) : ApiController 
     {
-        private readonly AppDbContext _dbContext = dbContext;
         private readonly FoodService _foodService = foodService;
 
         [HttpGet("foods")]
@@ -20,6 +18,20 @@ namespace food_order_dotnet.Controllers
         public async Task<ActionResult<FoodListResponse>> GetFoods([FromQuery] FoodListRequest param)
         {
             return await ExecuteAction(async () => await _foodService.GetFoods(param));
+        }
+
+        [HttpPost("cart")]
+        [Authorize]
+        public async Task<ActionResult<CartResponse>> AddCart(CartRequest request)
+        {
+            return await ExecuteAction(async () => await _foodService.AddCart(request));
+        }
+
+        [HttpDelete("cart/{foodId}")]
+        [Authorize]
+        public async Task<ActionResult<CartResponse>> AddCart(int foodId)
+        {
+            return await ExecuteAction(async () => await _foodService.DeleteCart(foodId));
         }
     }
 }

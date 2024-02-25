@@ -18,5 +18,10 @@ namespace food_order_dotnet.Resources
         public static string? RegisterSuccess => _resourceManager.GetString(nameof(RegisterSuccess));
         public static string? ServerError => _resourceManager.GetString(nameof(ServerError));
         public static string? Unauthorized => _resourceManager.GetString(nameof(Unauthorized));
+        public static string? FoodIdRequired => _resourceManager.GetString(nameof(FoodIdRequired));
+        public static string? FoodIdNotFound => _resourceManager.GetString(nameof(FoodIdNotFound));
+        public static string? GetFoodSuccess => _resourceManager.GetString(nameof(GetFoodSuccess));
+        public static string? AddCartSuccess => _resourceManager.GetString(nameof(AddCartSuccess));
+        public static string? DeleteCartSuccess => _resourceManager.GetString(nameof(DeleteCartSuccess));
     }
 }

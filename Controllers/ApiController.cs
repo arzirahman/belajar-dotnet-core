@@ -1,9 +1,7 @@
 using System.Net;
 using food_order_dotnet.DTO.Response;
-using food_order_dotnet.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 
 namespace food_order_dotnet.Controllers
 {
@@ -15,7 +13,7 @@ namespace food_order_dotnet.Controllers
             {
                 return await action();
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return BadRequest(new MessageResponse
@@ -23,16 +21,6 @@ namespace food_order_dotnet.Controllers
                     Message = ex.Message,
                     StatusCode = (int)HttpStatusCode.BadRequest,
                     Status = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new MessageResponse
-                {
-                    Message = ValidationMessages.ServerError,
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
-                    Status = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError)
                 });
             }
         }

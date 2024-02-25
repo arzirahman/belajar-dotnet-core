@@ -165,4 +165,24 @@
     <value>Unauthorized Request</value>
     <comment/>
   </data>
+  <data name="FoodIdRequired" xml:space="preserve">
+    <value>Food Id cannot be empty</value>
+    <comment/>
+  </data>
+  <data name="FoodIdNotFound" xml:space="preserve">
+    <value>Food ID not found</value>
+    <comment/>
+  </data>
+  <data name="GetFoodSuccess" xml:space="preserve">
+    <value>Get Food Successful</value>
+    <comment/>
+  </data>
+  <data name="AddCartSuccess" xml:space="preserve">
+    <value>Add {0} to Cart Successful</value>
+    <comment/>
+  </data>
+  <data name="DeleteCartSuccess" xml:space="preserve">
+    <value>Delete {0} from Cart Successful</value>
+    <comment/>
+  </data>
 </root>

@@ -40,7 +40,7 @@ namespace food_order_dotnet.Services
             var userData = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == user.Username) 
                 ?? throw new DbUpdateException(ValidationMessages.LoginFailed ?? "");
             if (!userData.VerifyPassword(user.Password ?? "")) {
-                throw new DbUpdateException(ValidationMessages.LoginFailed ?? "");
+                throw new Exception(ValidationMessages.LoginFailed ?? "");
             }
             return new SignInResponse{
                 Data = new SignInDTO

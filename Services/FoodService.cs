@@ -1,6 +1,11 @@
+using System.Data.Common;
+using System.Net;
 using food_order_dotnet.Data;
 using food_order_dotnet.DTO.Request;
 using food_order_dotnet.DTO.Response;
+using food_order_dotnet.Models;
+using food_order_dotnet.Resources;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace food_order_dotnet.Services
@@ -60,11 +65,91 @@ namespace food_order_dotnet.Services
             return new FoodListResponse
             {
                 Total = totalItems,
-                Status = "daw",
-                StatusCode = 33,
-                Message = "awd",
+                Message = ValidationMessages.GetFoodSuccess,
+                StatusCode = (int) HttpStatusCode.OK,
+                Status = ReasonPhrases.GetReasonPhrase((int) HttpStatusCode.OK),
                 Data = foods
             };
+        }
+
+        public async Task<CartResponse> AddCart(CartRequest request)
+        {
+            if (!await _dbContext.Foods.AnyAsync(f => f.FoodId == request.FoodId))
+            {
+                throw new Exception(ValidationMessages.FoodIdNotFound);
+            }
+            var userId = _jwtService.GetUserData().UserId;
+            var IsAdded = await _dbContext.Carts.AnyAsync(c => c.FoodId == request.FoodId && c.UserId == userId);
+            if (!IsAdded)
+            {
+                var cart = new Cart
+                {
+                    FoodId = request.FoodId,
+                    UserId = userId
+                };
+                _dbContext.Carts.Add(cart);
+            }
+            await _dbContext.SaveChangesAsync();
+            var food = await GetFoodDTO(request.FoodId);
+            return new CartResponse
+            {
+                Total = 1,
+                Message = string.Format(ValidationMessages.AddCartSuccess ?? "", food?.FoodName),
+                StatusCode = (int) HttpStatusCode.OK,
+                Status = ReasonPhrases.GetReasonPhrase((int) HttpStatusCode.OK),
+                Data = food
+            };
+        }
+
+        public async Task<CartResponse> DeleteCart(int? foodId)
+        {
+            if (!await _dbContext.Foods.AnyAsync(f => f.FoodId == foodId))
+            {
+                throw new Exception(ValidationMessages.FoodIdNotFound);
+            }
+            var userId = _jwtService.GetUserData().UserId;
+            var cart = await _dbContext.Carts.FirstOrDefaultAsync(c => c.FoodId == foodId && c.UserId == userId);
+            if (cart != null)
+            {
+                _dbContext.Carts.Remove(cart);
+                await _dbContext.SaveChangesAsync();
+            }
+            var food = await GetFoodDTO(foodId);
+            return new CartResponse
+            {
+                Total = 1,
+                Message = string.Format(ValidationMessages.DeleteCartSuccess ?? "", food?.FoodName),
+                StatusCode = (int) HttpStatusCode.OK,
+                Status = ReasonPhrases.GetReasonPhrase((int) HttpStatusCode.OK),
+                Data = food
+            };
+        }
+
+        private async Task<FoodListDTO?> GetFoodDTO(int? foodId)
+        {
+            var userId = _jwtService.GetUserData().UserId;
+            return await _dbContext.Foods
+                .Where(f => f.FoodId == foodId)
+                .Select(
+                f => new FoodListDTO
+                {
+                    FoodId = f.FoodId,
+                    Category = new FoodCategoryDto
+                    {
+                        CategoryId = f.CategoryId,
+                        CategoryName = f.Category != null ? f.Category.CategoryName : null
+                    },
+                    FoodName = f.FoodName,
+                    Price = f.FoodId,
+                    ImageFilename = f.ImageFilename,
+                    IsCart = _dbContext.Carts.Any(c => c.UserId == userId && c.FoodId == f.FoodId),
+                    IsFavorite = _dbContext.FavoriteFoods.Any(ff => 
+                        ff.UserId == userId && 
+                        ff.FoodId == f.FoodId && 
+                        ff.IsFavorite == true
+                    ),
+                }
+            ).FirstOrDefaultAsync();
         }
     }
 }
