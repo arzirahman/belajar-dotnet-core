@@ -16,7 +16,7 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options => 
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("publicConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("localConnection"));
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

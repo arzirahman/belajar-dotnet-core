@@ -13,6 +13,7 @@ namespace food_order_dotnet.Resources
         public static string? RetypePasswordRequired => _resourceManager.GetString(nameof(RetypePasswordRequired));
         public static string? PasswordLength => _resourceManager.GetString(nameof(PasswordLength));
         public static string? PasswordNotMatch => _resourceManager.GetString(nameof(PasswordNotMatch));
+        public static string? PasswordRegex => _resourceManager.GetString(nameof(PasswordRegex));
         public static string? LoginSuccess => _resourceManager.GetString(nameof(LoginSuccess));
         public static string? LoginFailed => _resourceManager.GetString(nameof(LoginFailed));
         public static string? RegisterSuccess => _resourceManager.GetString(nameof(RegisterSuccess));

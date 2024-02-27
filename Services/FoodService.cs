@@ -144,9 +144,10 @@ namespace food_order_dotnet.Services
             } 
             else
             {
-                favorite.IsFavorite = false;
+                favorite.IsFavorite = !favorite.IsFavorite;
                 _dbContext.FavoriteFoods.Update(favorite);
             }
+            Console.WriteLine(favorite);
             await _dbContext.SaveChangesAsync();
             var food = await GetFoodDTO(foodId, userId);
             return new CartResponse

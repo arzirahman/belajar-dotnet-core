@@ -14,6 +14,7 @@ namespace food_order_dotnet.DTO.Request
         
         [Required(ErrorMessageResourceName = "PasswordRequired",  ErrorMessageResourceType = typeof(ValidationMessages))]
         [MinLength(6, ErrorMessageResourceName = "PasswordLength", ErrorMessageResourceType = typeof(ValidationMessages))]
+        [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*\d).+$", ErrorMessageResourceName = "PasswordRegex", ErrorMessageResourceType = typeof(ValidationMessages))]
         public string? Password { get; set; }
 
         [Required(ErrorMessageResourceName = "RetypePasswordRequired",  ErrorMessageResourceType = typeof(ValidationMessages))]

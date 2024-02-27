@@ -193,4 +193,8 @@
     <value>{0} successfully removed from favorite</value>
     <comment/>
   </data>
+  <data name="PasswordRegex" xml:space="preserve">
+    <value>Password must contain at least one letter and one digit</value>
+    <comment/>
+  </data>
 </root>
