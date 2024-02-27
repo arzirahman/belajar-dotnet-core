@@ -28,7 +28,7 @@ namespace food_order_dotnet.Services
                 query = query.Where(f => f.FoodName != null && EF.Functions.Like(f.FoodName.ToLower(), $"%{foodName}%"));
             }
             var sortParams = param.SortBy?.Split(",") ?? [];
-            if(sortParams[0] == "foodName" && sortParams[1].Equals("desc", StringComparison.CurrentCultureIgnoreCase))
+            if(sortParams.Length > 1 && sortParams[0] == "foodName" && sortParams[1].Equals("desc", StringComparison.CurrentCultureIgnoreCase))
             {
                 query = query.OrderByDescending(f => f.FoodName);
             } 
