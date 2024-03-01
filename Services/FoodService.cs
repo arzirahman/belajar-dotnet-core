@@ -9,10 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace food_order_dotnet.Services
 {
-    public class FoodService(AppDbContext dbContext, JwtService jwtService)
+    public class FoodService(AppDbContext dbContext, JwtService jwtService, MinioService minioService)
     {
         private readonly AppDbContext _dbContext = dbContext;
         private readonly JwtService _jwtService = jwtService;
+        
+        private readonly MinioService _minioService = minioService;
 
         public async Task<FoodListResponse> GetFoods(FoodListRequest param)
         {
@@ -61,6 +63,10 @@ namespace food_order_dotnet.Services
                         ),
                     }
                 ).ToListAsync();
+            foreach (var food in foods)
+            {
+                food.ImageFilename = await _minioService.GetPresignedUrlAsync(food.ImageFilename!, 3600);
+            }
             return new FoodListResponse
             {
                 Total = totalItems,

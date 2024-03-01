@@ -6,6 +6,7 @@ using food_order_dotnet.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options => 
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("localConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("publicConnection"));
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -38,6 +39,18 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FoodService>();
+builder.Services.AddScoped<MinioService>();
+
+var minioClient = new MinioClient()
+    .WithEndpoint(builder.Configuration["Minio:Endpoint"])
+    .WithCredentials(builder.Configuration["Minio:AccessKey"], builder.Configuration["Minio:SecretKey"])
+    .Build();
+if (bool.Parse(builder.Configuration["Minio:WithSSL"]!))
+{
+    minioClient = minioClient.WithSSL();
+}
+
+builder.Services.AddSingleton<IMinioClient>(minioClient);
 
 var app = builder.Build();
 
